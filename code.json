@@ -1,0 +1,59 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v3.0.0-rc8.json",
+  "data": {"url": "transformed_data.csv"},
+  "width": 800,
+  "height": 300,
+  "title": "Male and Female population distribution by ages for choosen year (from 1989 to 2018)",
+  "transform": [
+    {"filter": {
+      "selection": "Choosen"
+      }},
+    {"calculate": "datum.sex == 'Female' ? 'Female' : 'Male'", "as": "gender"},
+    {"calculate": "year(datum.year)", "as": "Year"}
+  ],
+  "layer": [{
+  "mark": "bar",
+  "encoding": {
+    "x": {
+      "field": "age",
+      "type": "quantitative",
+      "axis": {
+        "title": "Age"
+      },
+      "scale": {
+        "domain": [1, 79],
+        "range": [0, 800]
+      }
+    },
+    "y": {
+      "aggregate": "median",
+      "field": "people",
+      "type": "quantitative",
+      "axis": {"title": "Population"},
+       "scale": {"domain": [0, 500000]},
+      "stack": null
+    },
+    "color": {
+      "field": "gender",
+      "type": "nominal",
+      "scale": {
+        "range": ["#e377c2","#1f77b4"]
+      }
+    },
+    "opacity": {
+      "value": 0.7
+    }
+  }
+},
+{
+  "mark": "rule",
+  "selection": {
+    "Choosen": {
+      "type": "single", "fields": ["Year"],
+      "bind": {
+        "Year": {"input": "range", "min": 1989, "max": 2018, "step": 1}
+      }
+    }
+  }
+}]
+}
